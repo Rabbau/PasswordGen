@@ -67,29 +67,18 @@ uvicorn main:app --reload
 pytest
 ```
 
-### Деплой (Render / Railway / Fly.io)
+### Деплой (Render)
+
+Выполнял через рендер с привязкой на репозиторий
 
 Общий алгоритм:
 
 - **Render**
-  - Создать новый **Web Service**, указать репозиторий с кодом
+  - Создал новый **Web Service**, указал репозиторий с кодом
   - Build command: `pip install -r requirements.txt`
   - Start command: `uvicorn main:app --host 0.0.0.0 --port 10000`
-  - Настроить переменные окружения (см. выше)
-
-- **Railway**
-  - Импортировать репозиторий как сервис
-  - В разделе Deployments указать:
-    - Install: `pip install -r requirements.txt`
-    - Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-
-- **Fly.io**
-  - Установить `flyctl`
-  - Выполнить `fly launch` в корне проекта и следовать инструкциям
-  - В `fly.toml` указать команду запуска `uvicorn main:app --host 0.0.0.0 --port 8000`
-
-После деплоя добавьте в этот файл ссылку:
-
-- **Продакшен URL**: _заполните после деплоя_
 
 
+- **Продакшен URL**: 
+
+- https://passwordgen-atoj.onrender.com
