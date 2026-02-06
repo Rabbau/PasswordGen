@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PasswordGen - Генератор паролей</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 PasswordGen</h1>
+            <p class="subtitle">Криптостойкий генератор паролей и анализатор сложности</p>
+        </header>
+
+        <main>
+            <!-- Tab Navigation -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="generate">
+                    <span>📝</span> Генератор
+                </button>
+                <button class="tab-button" data-tab="check">
+                    <span>✓</span> Проверка сложности
+                </button>
+                <button class="tab-button" data-tab="entropy">
+                    <span>📊</span> Энтропия
+                </button>
+            </div>
+
+            <!-- Generate Tab -->
+            <div id="generate" class="tab-content active">
+                <div class="section">
+                    <h2>Генератор паролей</h2>
+                    
+                    <div class="form-group">
+                        <label for="length">Длина пароля</label>
+                        <div class="slider-container">
+                            <input type="range" id="length" min="8" max="128" value="16" class="slider">
+                            <span id="length-value" class="slider-value">16</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="lowercase" checked>
+                            <span>Строчные буквы (a-z)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="uppercase" checked>
+                            <span>Заглавные буквы (A-Z)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="digits" checked>
+                            <span>Цифры (0-9)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="symbols">
+                            <span>Символы (!@#$%...)</span>
+                        </label>
+                    </div>
+
+                    <button id="generate-btn" class="btn btn-primary">Сгенерировать пароль</button>
+
+                    <div id="generate-result" class="result hidden">
+                        <div class="password-display">
+                            <input type="text" id="generated-password" readonly>
+                            <button id="copy-btn" class="btn-icon" title="Скопировать">📋</button>
+                        </div>
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="label">Энтропия:</span>
+                                <span id="gen-entropy" class="value">0</span> бит
+                            </div>
+                            <div class="metric">
+                                <span class="label">Сложность:</span>
+                                <span id="gen-strength" class="value strength-badge">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Check Tab -->
+            <div id="check" class="tab-content">
+                <div class="section">
+                    <h2>Проверка сложности пароля</h2>
+                    
+                    <div class="form-group">
+                        <label for="check-password">Введите пароль</label>
+                        <input type="password" id="check-password" placeholder="Ваш пароль">
+                        <button id="toggle-visibility" class="btn-icon" title="Показать/скрыть">👁️</button>
+                    </div>
+
+                    <button id="check-btn" class="btn btn-primary">Проверить сложность</button>
+
+                    <div id="check-result" class="result hidden">
+                        <div class="strength-indicator">
+                            <div class="strength-bar">
+                                <div id="strength-fill" class="strength-fill"></div>
+                            </div>
+                            <span id="strength-label" class="strength-label">—</span>
+                        </div>
+                        
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="label">Длина:</span>
+                                <span id="check-length" class="value">0</span> символов
+                            </div>
+                            <div class="metric">
+                                <span class="label">Размер алфавита:</span>
+                                <span id="check-charset" class="value">0</span>
+                            </div>
+                            <div class="metric">
+                                <span class="label">Энтропия:</span>
+                                <span id="check-entropy" class="value">0</span> бит
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entropy Tab -->
+            <div id="entropy" class="tab-content">
+                <div class="section">
+                    <h2>Расчёт энтропии пароля</h2>
+                    
+                    <div class="form-group">
+                        <label for="entropy-password">Введите пароль</label>
+                        <input type="password" id="entropy-password" placeholder="Ваш пароль">
+                        <button id="entropy-toggle-visibility" class="btn-icon" title="Показать/скрыть">👁️</button>
+                    </div>
+
+                    <button id="entropy-btn" class="btn btn-primary">Расчитать энтропию</button>
+
+                    <div id="entropy-result" class="result hidden">
+                        <div class="entropy-info">
+                            <div class="entropy-value">
+                                <span id="entropy-bits" class="big-number">0</span>
+                                <span class="unit">бит</span>
+                            </div>
+                            <p class="entropy-desc">Примерное количество операций для перебора: 2<sup id="entropy-power">0</sup></p>
+                        </div>
+
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="label">Длина пароля:</span>
+                                <span id="entropy-length" class="value">0</span> символов
+                            </div>
+                            <div class="metric">
+                                <span class="label">Детектированный алфавит:</span>
+                                <span id="entropy-charset" class="value">0</span>
+                            </div>
+                        </div>
+
+                        <div class="recommendations">
+                            <h3>Рекомендации:</h3>
+                            <ul id="entropy-recommendations"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>📚 <strong>Об API:</strong> Открытое REST API для генерации паролей. <a href="/docs" target="_blank">Документация (Swagger)</a> | <a href="/redoc" target="_blank">ReDoc</a></p>
+            <p>🔒 Все операции выполняются криптостойким способом с использованием <code>secrets</code> модуля Python</p>
+            <p class="version">PasswordGen v1.0.0</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
