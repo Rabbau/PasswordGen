@@ -12,10 +12,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
+from pydantic_settings import BaseSettings, SettingsConfigDict # type: ignore
+from slowapi import Limiter, _rate_limit_exceeded_handler # type: ignore
+from slowapi.errors import RateLimitExceeded # type: ignore
+from slowapi.util import get_remote_address  # type: ignore
 
 
 # ============================================================================
